@@ -20,4 +20,8 @@
     <Folder Include="Support\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\CyberSpaceExplosives\CyberSpaceExplosives_Library.csproj" />
+  </ItemGroup>
+
 </Project>
