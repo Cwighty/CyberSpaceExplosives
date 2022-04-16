@@ -4,37 +4,59 @@ using System.Linq;
 namespace CyberSpaceExplosives
 {
     public class Decompressor
-    {
-        public string function()
-        {
-            return null;
-        }
+    { 
         public static string Decompress(string input)
         {
             var decompressedString = "";
-            var pattern = new Regex(@"[(]([\d])[x]([\d])[)]");
-            var matches = pattern.Matches(input);
-            var newInput = pattern.Replace(input, x => "");
-            var selection = "";
-            if(matches.Count > 0)
+
+            for (int index = 0; index < input.Length; index++)
             {
-                var match = matches[0].Groups.Values.Where(x=> !x.Value.Contains("x"));
-                var counts = match.Select(x => Convert.ToInt32(x.Value)).ToList();
-                var selectionCount = counts[0];
-                var repetitionCount = counts[1];
-                for(int sel = 0; sel < selectionCount; sel++)
+                if(input[index] == '(')
                 {
-                    selection += newInput[sel];
+                    var selectionParse = "";
+                    var repetitionParse = "";
+                    index++;
+                    while(input[index] != 'x')
+                    {
+                        selectionParse += input[index];
+                        index++;
+                    }
+                    index++;
+                    while(input[index] != ')')
+                    {
+                        repetitionParse += input[index];
+                        index++;
+                    }
+                    index++;
+                    var selection = "";
+                    var selectionCount = ConvertToInt(selectionParse);
+                    for(int sel = index; sel < index + selectionCount; sel++ )
+                    {
+                        selection += input[sel];
+                    }
+                    index += selectionCount;
+                    for(int rep = 0; rep < ConvertToInt(repetitionParse); rep++)
+                    {
+                        decompressedString += selection;
+                    }
                 }
-                for(int rep = 0; rep < repetitionCount; rep++)
+                if(index < input.Length)
                 {
-                    decompressedString += selection;
+                    if(input[index] == '(')
+                    {
+                        index--;
+                        continue;
+                    }
+                    decompressedString += input[index];  
                 }
-
-
-            return decompressedString;
             }
-            return input;
+            return decompressedString; 
+        }
+
+
+        private static int ConvertToInt(string parse)
+        {
+            return Convert.ToInt32(parse);
         }
     }
 }
