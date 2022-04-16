@@ -5,52 +5,70 @@ namespace CyberSpaceExplosives
 {
     public class Decompressor
     {
-        public string function()
+        public static (int numNextChars, int numOfRep) CommandBlockOperation(string commandBlock)
         {
-            return null;
+            string numChar = "";
+            string numRepeats = "";
+            int i = 0;
+
+            while (commandBlock[i] != 'x')
+            {
+                numChar += commandBlock[i];
+                i++;
+            }
+            i++;
+            while (i < commandBlock.Length)
+            {
+                numRepeats += commandBlock[i];
+                i++;
+            }
+
+            return (Convert.ToInt32(numChar), Convert.ToInt32(numRepeats));
         }
         public static string Decompress(string input)
         {
-            var pattern = new Regex(@"[(][\d][x][\d][)]");
-            var matches = pattern.Matches(input);
-            var selectionPattern = new Regex(@"[)](.*)");
-            var selection = selectionPattern.Matches(input)[0].Value.ToString();
-            var selectionCount = 0;
-            var repetitionCount = 0;
-            if (matches.Count > 0)
-            {
-                selectionCount = Convert.ToInt32(matches[0].Value.ToString()[1].ToString());
-                repetitionCount = Convert.ToInt32(matches[0].Value.ToString()[3].ToString());
-            }
-            var finalString = "";
-            
-            
-            bool insideMarker = false;
-            for (int i = 0; i < input.Length; i++)
+            string answer = "";
+            int i = 0;
+            (int nextCharCount, int numReps) NextCharsandReps;
+
+            while (i < input.Length)
             {
                 if (input[i] == '(')
                 {
-                    insideMarker = true;
-                    
-                }
-                if (insideMarker)
-                {
-                    for (int k = 0; k < repetitionCount; k++)
+                    i++;
+                    string commandBlock = "";
+                    while (input[i] != ')')
                     {
-                        finalString += selection[1];
+                        commandBlock += input[i];
+                        i++;
+                    }
+                    i++;
+
+                    NextCharsandReps = CommandBlockOperation(commandBlock);
+
+                    string charsToRepeat = "";
+                    int j = 0;
+                    while (j < NextCharsandReps.nextCharCount)
+                    {
+                        charsToRepeat += input[i];
+                        j++;
+                        i++;
+                    }
+
+
+                    for (j = 0; j < NextCharsandReps.numReps; j++)
+                    {
+                        answer += charsToRepeat;
                     }
                 }
-                if(input[i] == ')')
+                else
                 {
-                    insideMarker = false;
+                    answer += input[i];
+                    i++;
                 }
-                if(!insideMarker)
-                    finalString += input[i];
+
             }
-
-            return finalString;
-
-
+            return answer;
         }
     }
 }
