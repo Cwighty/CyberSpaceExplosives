@@ -5,52 +5,58 @@ namespace CyberSpaceExplosives
 {
     public class Decompressor
     {
-        public string function()
-        {
-            return null;
-        }
         public static string Decompress(string input)
         {
-            var pattern = new Regex(@"[(][\d][x][\d][)]");
-            var matches = pattern.Matches(input);
-            var selectionPattern = new Regex(@"[)](.*)");
-            var selection = selectionPattern.Matches(input)[0].Value.ToString();
-            var selectionCount = 0;
-            var repetitionCount = 0;
-            if (matches.Count > 0)
-            {
-                selectionCount = Convert.ToInt32(matches[0].Value.ToString()[1].ToString());
-                repetitionCount = Convert.ToInt32(matches[0].Value.ToString()[3].ToString());
-            }
-            var finalString = "";
-            
-            
-            bool insideMarker = false;
+            int selectionCount = 0;
+            int repetitionCount = 0;
+            string finalString = "";
+            string tempString = "";
+
             for (int i = 0; i < input.Length; i++)
             {
                 if (input[i] == '(')
                 {
-                    insideMarker = true;
-                    
-                }
-                if (insideMarker)
-                {
+                    string selections = "";
+                    string repetitions = "";
+                    i++;
+                    while (input[i] != 'x')
+                    {
+                        selections += input[i];
+                        i++;
+                    }
+                    i++;
+                    while (input[i] != ')')
+                    {
+                        repetitions += input[i];
+                        i++;
+                    }
+                    i++;
+
+                    selectionCount = Convert.ToInt32(selections);
+                    repetitionCount = Convert.ToInt32(repetitions);
+
+                    for (int j = i; j < i + selectionCount; j++)
+                    {
+                        tempString += input[j];
+                    }
+                    i += selectionCount;
                     for (int k = 0; k < repetitionCount; k++)
                     {
-                        finalString += selection[1];
+                        finalString += tempString;
                     }
+                    tempString = "";
                 }
-                if(input[i] == ')')
+                if (i < input.Length)
                 {
-                    insideMarker = false;
-                }
-                if(!insideMarker)
+                    if (input[i] == '(')
+                    {
+                        i--;
+                        continue;
+                    }
                     finalString += input[i];
+                }
             }
-
             return finalString;
-
-
         }
     }
 }

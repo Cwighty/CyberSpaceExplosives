@@ -1,2 +1,5 @@
-﻿// See https://aka.ms/new-console-template for more information
-Console.WriteLine("Hello, World!");
+﻿using CyberSpaceExplosives;
+
+string final = Decompressor.Decompress(System.IO.File.ReadAllText(Environment.CurrentDirectory + "/../../../advent.txt"));
+
+Console.WriteLine(final.Length);
