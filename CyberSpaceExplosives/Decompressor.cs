@@ -11,46 +11,30 @@ namespace CyberSpaceExplosives
         }
         public static string Decompress(string input)
         {
-            var pattern = new Regex(@"[(][\d][x][\d][)]");
+            var decompressedString = "";
+            var pattern = new Regex(@"[(]([\d])[x]([\d])[)]");
             var matches = pattern.Matches(input);
-            var selectionPattern = new Regex(@"[)](.*)");
-            var selection = selectionPattern.Matches(input)[0].Value.ToString();
-            var selectionCount = 0;
-            var repetitionCount = 0;
-            if (matches.Count > 0)
+            var newInput = pattern.Replace(input, x => "");
+            var selection = "";
+            if(matches.Count > 0)
             {
-                selectionCount = Convert.ToInt32(matches[0].Value.ToString()[1].ToString());
-                repetitionCount = Convert.ToInt32(matches[0].Value.ToString()[3].ToString());
+                var match = matches[0].Groups.Values.Where(x=> !x.Value.Contains("x"));
+                var counts = match.Select(x => Convert.ToInt32(x.Value)).ToList();
+                var selectionCount = counts[0];
+                var repetitionCount = counts[1];
+                for(int sel = 0; sel < selectionCount; sel++)
+                {
+                    selection += newInput[sel];
+                }
+                for(int rep = 0; rep < repetitionCount; rep++)
+                {
+                    decompressedString += selection;
+                }
+
+
+            return decompressedString;
             }
-            var finalString = "";
-            
-            
-            bool insideMarker = false;
-            for (int i = 0; i < input.Length; i++)
-            {
-                if (input[i] == '(')
-                {
-                    insideMarker = true;
-                    
-                }
-                if (insideMarker)
-                {
-                    for (int k = 0; k < repetitionCount; k++)
-                    {
-                        finalString += selection[1];
-                    }
-                }
-                if(input[i] == ')')
-                {
-                    insideMarker = false;
-                }
-                if(!insideMarker)
-                    finalString += input[i];
-            }
-
-            return finalString;
-
-
+            return input;
         }
     }
 }
