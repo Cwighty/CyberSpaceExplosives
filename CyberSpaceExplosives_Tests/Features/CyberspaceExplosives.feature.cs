@@ -128,6 +128,55 @@ this.ScenarioInitialize(scenarioInfo);
             }
             this.ScenarioCleanup();
         }
+        
+        [NUnit.Framework.TestAttribute()]
+        [NUnit.Framework.DescriptionAttribute("Complete Decompressing")]
+        [NUnit.Framework.TestCaseAttribute("ADVENT", "ADVENT", "6", null)]
+        [NUnit.Framework.TestCaseAttribute("A(1x5)BC", "ABBBBBC", "7", null)]
+        [NUnit.Framework.TestCaseAttribute("(3x3)XYZ", "XYZXYZXYZ", "9", null)]
+        [NUnit.Framework.TestCaseAttribute("A(2x2)BCD(2x2)EFG", "ABCBCDEFEFG", "11", null)]
+        [NUnit.Framework.TestCaseAttribute("(6x1)(1x3)A", "AAA", "3", null)]
+        [NUnit.Framework.TestCaseAttribute("X(8x2)(3x3)ABCY", "XABCABCABCABCABCABCY", "20", null)]
+        public virtual void CompleteDecompressing(string input, string output, string length, string[] exampleTags)
+        {
+            string[] tagsOfScenario = exampleTags;
+            System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
+            argumentsOfScenario.Add("input", input);
+            argumentsOfScenario.Add("output", output);
+            argumentsOfScenario.Add("length", length);
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Complete Decompressing", null, tagsOfScenario, argumentsOfScenario, this._featureTags);
+#line 19
+this.ScenarioInitialize(scenarioInfo);
+#line hidden
+            bool isScenarioIgnored = default(bool);
+            bool isFeatureIgnored = default(bool);
+            if ((tagsOfScenario != null))
+            {
+                isScenarioIgnored = tagsOfScenario.Where(__entry => __entry != null).Where(__entry => String.Equals(__entry, "ignore", StringComparison.CurrentCultureIgnoreCase)).Any();
+            }
+            if ((this._featureTags != null))
+            {
+                isFeatureIgnored = this._featureTags.Where(__entry => __entry != null).Where(__entry => String.Equals(__entry, "ignore", StringComparison.CurrentCultureIgnoreCase)).Any();
+            }
+            if ((isScenarioIgnored || isFeatureIgnored))
+            {
+                testRunner.SkipScenario();
+            }
+            else
+            {
+                this.ScenarioStart();
+#line 20
+ testRunner.Given(string.Format("the input {0}", input), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+#line hidden
+#line 21
+ testRunner.When("fully decompressing the input", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line hidden
+#line 22
+ testRunner.Then(string.Format("we get {0} with a length of {1}", output, length), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line hidden
+            }
+            this.ScenarioCleanup();
+        }
     }
 }
 #pragma warning restore
