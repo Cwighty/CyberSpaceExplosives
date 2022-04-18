@@ -11,7 +11,8 @@ namespace CyberSpaceExplosives
 
         public Decompressor(string path)
         {
-            string filePath = Environment.CurrentDirectory+ @"../../../../"+  path;
+            /*string filePath = Environment.CurrentDirectory+ @"../../../../"+  path;*/
+            string filePath = Environment.CurrentDirectory + @"/" + path;
             this.fromFile = System.IO.File.ReadAllLines(filePath)[0];
         }
         public Decompressor()
@@ -103,6 +104,21 @@ namespace CyberSpaceExplosives
                  }
                 CountParenthesisPairs();
             }
+
+        }
+
+        public void FullyDecompress()
+        {
+            this.answer = "";
+            Decompress();
+            CountParenthesisPairs();
+
+            while(parenthesisCount != 0)
+            {
+                Decompress();
+                CountParenthesisPairs();
+            }
+
 
         }
 
