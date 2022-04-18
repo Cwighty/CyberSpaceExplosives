@@ -15,3 +15,4 @@ Scenario Outline: Decompressing
 	| A(2x2)BCD(2x2)EFG | ABCBCDEFEFG        | 11     |
 	| (6x1)(1x3)A       | (1x3)A             | 6      |
 	| X(8x2)(3x3)ABCY   | X(3x3)ABC(3x3)ABCY | 18     |
+	| A(1x3)B(1x3)C     | ABBBCCC            | 7      |

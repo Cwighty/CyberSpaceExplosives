@@ -5,52 +5,69 @@ namespace CyberSpaceExplosives
 {
     public class Decompressor
     {
-        public string function()
-        {
-            return null;
-        }
         public static string Decompress(string input)
         {
-            var pattern = new Regex(@"[(][\d][x][\d][)]");
-            var matches = pattern.Matches(input);
-            var selectionPattern = new Regex(@"[)](.*)");
-            var selection = selectionPattern.Matches(input)[0].Value.ToString();
-            var selectionCount = 0;
-            var repetitionCount = 0;
-            if (matches.Count > 0)
+            var decompressedString = "";
+
+            for (int index = 0; index < input.Length; index++)
             {
-                selectionCount = Convert.ToInt32(matches[0].Value.ToString()[1].ToString());
-                repetitionCount = Convert.ToInt32(matches[0].Value.ToString()[3].ToString());
-            }
-            var finalString = "";
-            
-            
-            bool insideMarker = false;
-            for (int i = 0; i < input.Length; i++)
-            {
-                if (input[i] == '(')
+                if(input[index] == '(')
                 {
-                    insideMarker = true;
-                    
-                }
-                if (insideMarker)
-                {
-                    for (int k = 0; k < repetitionCount; k++)
+                    string selectionParse = "", repetitionParse = "";
+                    index++;
+                    while (input[index] != 'x')
                     {
-                        finalString += selection[1];
+                        selectionParse += input[index];
+                        index++;
                     }
+                    index++;
+                    while (input[index] != ')')
+                    {
+                        repetitionParse += input[index];
+                        index++;
+                    }
+                    index++;
+                    var selection = MakeSelection(input, index, selectionParse);
+                    index += selection.Length;
+                    decompressedString += RepeatSelection(repetitionParse, selection);
                 }
-                if(input[i] == ')')
+                if (index < input.Length)
                 {
-                    insideMarker = false;
+                    if(input[index] == '(')
+                    {
+                        index--;
+                        continue;
+                    }
+                    decompressedString += input[index];  
                 }
-                if(!insideMarker)
-                    finalString += input[i];
             }
+            return decompressedString; 
+        }
 
-            return finalString;
+        private static string MakeSelection(string input, int currentIndex, string selectionSize)
+        {
+            var selection = "";
+            var selectionCount = Convert.ToInt32(selectionSize);
+            for (int sel = currentIndex; sel < currentIndex + selectionCount; sel++)
+            {
+                selection += input[sel];
+            }
+            return selection;
+        }
 
+        private static string RepeatSelection(string repetitionParse, string selection)
+        {
+            var decompressedString = "";
+            for (int rep = 0; rep < Convert.ToInt32(repetitionParse); rep++)
+            {
+                decompressedString += selection;
+            }
+            return decompressedString;
+        }
 
+        public static string DecompressTwice(string input)
+        {
+            return (Decompress(Decompress(input)));
         }
     }
 }

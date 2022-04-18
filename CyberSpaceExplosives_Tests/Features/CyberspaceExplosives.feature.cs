@@ -82,6 +82,7 @@ namespace CyberSpaceExplosives_Tests.Features
         [NUnit.Framework.TestCaseAttribute("A(2x2)BCD(2x2)EFG", "ABCBCDEFEFG", "11", null)]
         [NUnit.Framework.TestCaseAttribute("(6x1)(1x3)A", "(1x3)A", "6", null)]
         [NUnit.Framework.TestCaseAttribute("X(8x2)(3x3)ABCY", "X(3x3)ABC(3x3)ABCY", "18", null)]
+        [NUnit.Framework.TestCaseAttribute("A(1x3)B(1x3)C", "ABBBCCC", "7", null)]
         public virtual void Decompressing(string input, string output, string length, string[] exampleTags)
         {
             string[] @__tags = new string[] {
