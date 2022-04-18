@@ -4,7 +4,7 @@ using System.Linq;
 namespace CyberSpaceExplosives
 {
     public class Decompressor
-    { 
+    {
         public static string Decompress(string input)
         {
             var decompressedString = "";
@@ -13,34 +13,25 @@ namespace CyberSpaceExplosives
             {
                 if(input[index] == '(')
                 {
-                    var selectionParse = "";
-                    var repetitionParse = "";
+                    string selectionParse = "", repetitionParse = "";
                     index++;
-                    while(input[index] != 'x')
+                    while (input[index] != 'x')
                     {
                         selectionParse += input[index];
                         index++;
                     }
                     index++;
-                    while(input[index] != ')')
+                    while (input[index] != ')')
                     {
                         repetitionParse += input[index];
                         index++;
                     }
                     index++;
-                    var selection = "";
-                    var selectionCount = ConvertToInt(selectionParse);
-                    for(int sel = index; sel < index + selectionCount; sel++ )
-                    {
-                        selection += input[sel];
-                    }
-                    index += selectionCount;
-                    for(int rep = 0; rep < ConvertToInt(repetitionParse); rep++)
-                    {
-                        decompressedString += selection;
-                    }
+                    var selection = MakeSelection(input, index, selectionParse);
+                    index += selection.Length;
+                    decompressedString += RepeatSelection(repetitionParse, selection);
                 }
-                if(index < input.Length)
+                if (index < input.Length)
                 {
                     if(input[index] == '(')
                     {
@@ -53,10 +44,30 @@ namespace CyberSpaceExplosives
             return decompressedString; 
         }
 
-
-        private static int ConvertToInt(string parse)
+        private static string MakeSelection(string input, int currentIndex, string selectionSize)
         {
-            return Convert.ToInt32(parse);
+            var selection = "";
+            var selectionCount = Convert.ToInt32(selectionSize);
+            for (int sel = currentIndex; sel < currentIndex + selectionCount; sel++)
+            {
+                selection += input[sel];
+            }
+            return selection;
+        }
+
+        private static string RepeatSelection(string repetitionParse, string selection)
+        {
+            var decompressedString = "";
+            for (int rep = 0; rep < Convert.ToInt32(repetitionParse); rep++)
+            {
+                decompressedString += selection;
+            }
+            return decompressedString;
+        }
+
+        public static string DecompressTwice(string input)
+        {
+            return (Decompress(Decompress(input)));
         }
     }
 }
